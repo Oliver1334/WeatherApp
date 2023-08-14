@@ -1,4 +1,13 @@
-const App = () => {
+import {ChangeEvent, useState} from 'react'
+
+
+const App = (): JSX.Element => {
+  const [term, setTerm] = useState<string>('')
+
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => { setTerm(e.target.value)}
+  // http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+
+
   return (
     <main className="flex justify-center items-center bg-gradient-to-br from-yellow-100 via--500 to-emerald-900 h-[100vh] w-full">
 
@@ -8,7 +17,7 @@ const App = () => {
         <p className="text-sm mt-2"> Where would you like to know what the weather is like?</p>
 
       <div className="flex mt-10 md:mt-4">
-        <input type="text" value={''} className="px-2 py-1 rounded-l-md border-2 border-white" />
+        <input type="text" value={term} className="px-2 py-1 rounded-l-md border-2 border-white" onChange={onInputChange}/>
 
         <button className="rounded-r-md border-2 border-zinc-100 hover:border-zinc-500 hover:text-zinc-500 text-zinc-100 px-2 py-1 cursor-pointer">search</button>
       </div>
