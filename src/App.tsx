@@ -5,6 +5,7 @@ import { optionType } from './types'
 
 const App = (): JSX.Element => {
   const [term, setTerm] = useState<string>('')
+const [city, setCity] = useState<optionType | null>(null)
   const [options, setOptions] = useState<[]>([])
 
 const getSearchOptions = (value: string) => {
@@ -24,9 +25,17 @@ const getSearchOptions = (value: string) => {
   }
 
   const onOptionSelect = (option: optionType) => {
-    console.log(option.name);
+    setCity(option)
     // do something
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${option.name}&appid=${process.env.REACT_APP_API_KEY}&units=metric`)
+  .then(res => res.json()).then((data) => console.log({data}))
   }
+// add this one instead ^^^ https://api.openweathermap.org/data/2.5/weather?q=${*cityName*}&appid=${*API_key*}&units=metric  << comment on danascript video this api works instead of one below...
+
+//https://api.openweathermap.org/data/2.5/onecall?lat=${option.lat}&lon=${option.lon}&units=metric&appid=${process.env.REACT_APP_API_KEY}
+
+
   
   // http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
 
