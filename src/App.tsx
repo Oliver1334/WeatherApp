@@ -1,4 +1,4 @@
-import {ChangeEvent, useState} from 'react'
+import {ChangeEvent, useState, useEffect} from 'react'
 
 import { optionType } from './types'
 
@@ -34,12 +34,17 @@ const getSearchOptions = (value: string) => {
 // add this one instead ^^^ https://api.openweathermap.org/data/2.5/weather?q=${*cityName*}&appid=${*API_key*}&units=metric  << comment on danascript video this api works instead of one below...
 
 //https://api.openweathermap.org/data/2.5/onecall?lat=${option.lat}&lon=${option.lon}&units=metric&appid=${process.env.REACT_APP_API_KEY}
-
-
   
   // http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
 
+useEffect(() => {
 
+  if(city) {
+    setTerm(city.name)
+    setOptions([])
+  }
+}, [city])
+  
   return (
     <main className="flex justify-center items-center bg-gradient-to-br from-yellow-100 via--500 to-emerald-900 h-[100vh] w-full">
 
