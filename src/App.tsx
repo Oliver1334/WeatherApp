@@ -1,10 +1,11 @@
-import {ChangeEvent, useState} from 'react'
+import {ChangeEvent, useState, useEffect} from 'react'
 
 import { optionType } from './types'
 
 
 const App = (): JSX.Element => {
   const [term, setTerm] = useState<string>('')
+const [city, setCity] = useState<optionType | null>(null)
   const [options, setOptions] = useState<[]>([])
 
 const getSearchOptions = (value: string) => {
@@ -23,14 +24,38 @@ const getSearchOptions = (value: string) => {
     getSearchOptions(value)
   }
 
-  const onOptionSelect = (option: optionType) => {
-    console.log(option.name);
-    // do something
-  }
+const getForecast = (city: optionType) => {
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.name}&appid=${process.env.REACT_APP_API_KEY}&units=metric`)
+  .then(res => res.json()).then((data) => console.log({data}))
+  
+// add this one instead ^^^ https://api.openweathermap.org/data/2.5/weather?q=${*cityName*}&appid=${*API_key*}&units=metric  << comment on danascript video this api works instead of one below...
+
+//https://api.openweathermap.org/data/2.5/onecall?lat=${option.lat}&lon=${option.lon}&units=metric&appid=${process.env.REACT_APP_API_KEY}
   
   // http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+}
+
+const onSubmit = () => {
+  if (!city) return
 
 
+  getForecast(city)
+}
+
+  const onOptionSelect = (option: optionType) => {
+    setCity(option)
+    // do something
+  }
+   
+
+useEffect(() => {
+
+  if(city) {
+    setTerm(city.name)
+    setOptions([])
+  }
+}, [city])
+  
   return (
     <main className="flex justify-center items-center bg-gradient-to-br from-yellow-100 via--500 to-emerald-900 h-[100vh] w-full">
 
@@ -52,7 +77,8 @@ const getSearchOptions = (value: string) => {
       ))}
 </ul>
 
-        <button className="rounded-r-md border-2 border-zinc-100 hover:border-zinc-500 hover:text-zinc-500 text-zinc-100 px-2 py-1 cursor-pointer">search</button>
+        <button className="rounded-r-md border-2 border-zinc-100 hover:border-zinc-500 hover:text-zinc-500 text-zinc-100 px-2 py-1 cursor-pointer"
+        onClick={onSubmit}>search</button>
       </div>
 
       </section>
