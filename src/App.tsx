@@ -24,18 +24,29 @@ const getSearchOptions = (value: string) => {
     getSearchOptions(value)
   }
 
-  const onOptionSelect = (option: optionType) => {
-    setCity(option)
-    // do something
-
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${option.name}&appid=${process.env.REACT_APP_API_KEY}&units=metric`)
+const getForecast = (city: optionType) => {
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.name}&appid=${process.env.REACT_APP_API_KEY}&units=metric`)
   .then(res => res.json()).then((data) => console.log({data}))
-  }
+  
 // add this one instead ^^^ https://api.openweathermap.org/data/2.5/weather?q=${*cityName*}&appid=${*API_key*}&units=metric  << comment on danascript video this api works instead of one below...
 
 //https://api.openweathermap.org/data/2.5/onecall?lat=${option.lat}&lon=${option.lon}&units=metric&appid=${process.env.REACT_APP_API_KEY}
   
   // http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+}
+
+const onSubmit = () => {
+  if (!city) return
+
+
+  getForecast(city)
+}
+
+  const onOptionSelect = (option: optionType) => {
+    setCity(option)
+    // do something
+  }
+   
 
 useEffect(() => {
 
@@ -66,7 +77,8 @@ useEffect(() => {
       ))}
 </ul>
 
-        <button className="rounded-r-md border-2 border-zinc-100 hover:border-zinc-500 hover:text-zinc-500 text-zinc-100 px-2 py-1 cursor-pointer">search</button>
+        <button className="rounded-r-md border-2 border-zinc-100 hover:border-zinc-500 hover:text-zinc-500 text-zinc-100 px-2 py-1 cursor-pointer"
+        onClick={onSubmit}>search</button>
       </div>
 
       </section>
