@@ -1,5 +1,5 @@
 import {useState, useEffect, ChangeEvent} from "react"
-import { optionType } from "../types"
+import { optionType, forecastType } from "../types"
 
 
 
@@ -7,7 +7,7 @@ const useForecast = () => {
     const [term, setTerm] = useState<string>('')
     const [city, setCity] = useState<optionType | null>(null)
       const [options, setOptions] = useState<[]>([])
-      const [forecast, setForecast] = useState<null>(null)
+      const [forecast, setForecast] = useState<forecastType | null>(null)
     
     const getSearchOptions = (value: string) => {
       fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${value.trim()}&limit=5&appid=${process.env.REACT_APP_API_KEY}`).then(res => res.json()).then((data) => setOptions(data))
@@ -26,8 +26,15 @@ const useForecast = () => {
       }
     
     const getForecast = (city: optionType) => {
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.name}&appid=${process.env.REACT_APP_API_KEY}&units=metric`)
-      .then(res => res.json()).then((data) => setForecast(data))
+      fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city.name}&appid=${process.env.REACT_APP_API_KEY}&units=metric`)
+      .then(res => res.json()).then((data) => {
+
+        const forecastData = {
+          ...data.city,
+          list: data.list.slice(0, 16),
+        }
+        setForecast(forecastData)
+      })
       
     // add this one instead ^^^ https://api.openweathermap.org/data/2.5/weather?q=${*cityName*}&appid=${*API_key*}&units=metric  << comment on danascript video this api works instead of one below...
     
