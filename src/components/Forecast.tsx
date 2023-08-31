@@ -1,4 +1,4 @@
-import { getSunTime, getWindDirection, getHumidityValue, getPop } from '../helpers'
+import { getSunTime, getWindDirection, getHumidityValue, getPop, getVisibilityValue } from '../helpers'
 import { forecastType } from '../types'
 import Sunrise from './Icons/Sunrise'
 import Sunset from './Icons/Sunset'
@@ -99,7 +99,20 @@ const Forecast = ({ data }: Props): JSX.Element => {
             description={`${getPop(today.pop)}, clouds at ${today.clouds.all}%`}
           />
           {/* pressure */}
+          <Tile
+            icon="pressure"
+            title="Pressure"
+            info={`${today.main.pressure} hPa`}
+            description={`${
+                Math.round(today.main.pressure) < 1013 ? 'Lower' : 'Higher'} than standard`}
+          />
           {/* visibility */}
+          <Tile
+            icon="visibility"
+            title="Visibility"
+            info={`${(today.visibility / 1000).toFixed()} km`}
+            description={getVisibilityValue(today.visibility)}
+          />
         </section>
       </div>
     </div>
